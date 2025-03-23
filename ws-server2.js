@@ -23,7 +23,7 @@ server.on('connection', (socket) => {
     const msg = JSON.parse(data);
     console.log('Get Message:', msg);
 
-    // 接続している全てのクライアントにメッセージ送信
+    // 接続して来たクライアント以外のクライアントにメッセージ送信
     server.clients.forEach((client) => {
       if (client !== socket && client.readyState === WebSocket.OPEN) {
         client.send(data);
@@ -34,14 +34,14 @@ server.on('connection', (socket) => {
   // コマンドラインを利用してメッセージをクライアントに送信
   rl.on('line', (input) => {
     const msg = {
-        who: "Server",
-        messages: input,
+      who: "Server",
+      messages: input,
     };
     // 接続している全てのクライアントにメッセージ送信
     server.clients.forEach((client) => {
-      if (client !== socket && client.readyState === WebSocket.OPEN) {
+      if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify(msg));
-      }
+      }  
     });
   });
 
